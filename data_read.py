@@ -14,7 +14,7 @@ time.sleep(2)  # wait for Arduino reset
 thresholds = [1700, 1800, 1600, 1200, 1800]
 
 # Local API endpoint
-url = "http://127.0.0.1:7000/receive_signals"  # change to your API route
+url = "http://127.0.0.1:7001/receive_signals"  # change to your API route
 
 try:
     while True:
