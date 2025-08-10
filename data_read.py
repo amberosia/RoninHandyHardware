@@ -9,13 +9,12 @@ import requests
 ser = serial.Serial('COM9', 115200)
 time.sleep(2)  # wait for Arduino reset
 
-data = []
 
-# Example thresholds for each of the 6 values
-thresholds = [100, 200, 150, 300, 250, 400]
+# Example thresholds for each of the 5 values
+thresholds = [1700, 1800, 1600, 1200, 1800]
 
 # Local API endpoint
-url = "http://127.0.0.1:5000/data"  # change to your API route
+url = "http://127.0.0.1:7000/receive_signals"  # change to your API route
 
 try:
     while True:
@@ -28,9 +27,10 @@ try:
             # Compare with thresholds
             for i, val in enumerate(values):
                 payload = {
-                    "signal": i,
-                    "value": "flexed" if (val > thresholds[i]) else "not flexed"
+                    "signal": "finger"+str(i+1),
+                    "value": str(i+1)+"flexed" if (val > thresholds[i]) else str(i+1)+"not flexed"+str(val)
                 }
+                #print(payload)
                 # Send JSON to local server
                 try:
                     response = requests.post(url, json=payload)
@@ -38,11 +38,12 @@ try:
                 except requests.exceptions.RequestException as e:
                     print(f"Error sending data: {e}")
 
-            data.append(values)
-            print(values)  # see values in console
+            #print(values)  # see values in console
 
 
 # exit upon KeyboardInterrupt (Ctrl + C)
 except KeyboardInterrupt:
     print("Stopped")
     ser.close()
+
+
